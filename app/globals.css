@@ -1,21 +1,42 @@
+/* globals.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Dark Theme - RGB Values */
+    --background-primary: 17 24 39;
+    --background-secondary: 31 41 55;
+    --text-primary: 249 250 251;
+    --text-secondary: 156 163 175;
+    --accent-primary: 99 102 241;
+    --success-primary: 34 197 94;
+    --danger-primary: 239 68 68;
+    --progress-background: 55 65 81;
+    --neutral-primary: 156 163 175; /* Example: dark mode gray-500 */
+    --neutral-hover:  107 114 128;   /* Example: dark mode gray-700 */
+    
+  }
+
+  .light {
+    /* Light Theme - RGB Values */
+    --background-primary: 255 255 255;
+    --background-secondary: 249 250 251;
+    --text-primary: 17 24 39;
+    --text-secondary: 75 85 99;
+    --accent-primary: 79 70 229;
+    --success-primary: 22 163 74;
+    --danger-primary: 220 38 38;
+    --progress-background: 229 231 235;
+    --neutral-primary: 107 114 128; /* Example: gray-500 */
+    --neutral-hover:  75 85 99;   /* Example: gray-700 */
+    
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+.recharts-radial-bar-background path {
+  fill: #374151  !important;
 }
+
+
