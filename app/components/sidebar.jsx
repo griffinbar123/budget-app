@@ -20,7 +20,7 @@ const routes = [
   { name: "Dashboard", path: "/home", icon: FiHome },
   { name: "Budget", path: "/home/budget", icon: FiDollarSign },
   { name: "Transactions", path: "/home/transactions", icon: FiClock },
-  { name: "Savings", path: "/home/savings", icon: FaPiggyBank },
+  // { name: "Savings", path: "/home/savings", icon: FaPiggyBank },
   { name: "Accounts", path: "/home/accounts", icon: FiLink}, // Added Accounts
   { name: "AI Chat", path: "/home/ai-chat", icon: FiMessageSquare },
 ];

@@ -1,39 +1,28 @@
-// --- app/home/page.jsx ---
+// /app/home/page.jsx
 'use client'
 import { useSelector } from 'react-redux';
-import { useState, useEffect } from 'react'; // Keep useState, useEffect
+import { useState, useEffect } from 'react';
 import {
     selectCurrentMonthTransactions,
-    selectPlaidInfo  // Keep PlaidInfo selector
+    selectPlaidInfo
 } from '../store/transactionsSlice';
 import {
   selectCurrentMonthSummary,
-  selectCurrentMonthChartData,
-  selectAllCategories // Correct: From categoriesSlice
+  selectCurrentMonthChartData, // <- Re-add selector import for the bar chart
+  selectAllCategories
 } from '../store/categoriesSlice';
 import PageHeader from "@/app/components/generic/page-header";
 import NavigationLinks from '@/app/components/generic/navigation-links';
 import CategoryBreakdownSection from "../components/home/category-breakdown";
 import RecentTransactionsSection from "../components/home/recent-transactions";
 import QuickStatsSection from "../components/home/quick-stats";
-import CustomBarChart from "@/app/components/charts/bar-chart";
-import FundBreakdownChart from "@/app/components/charts/funds-breakdown-chart";
+import CustomBarChart from "@/app/components/charts/bar-chart"; // <- Re-add chart component import
+// FundBreakdownChart import remains removed
 
-// --- Visualization Section Component ---
-function VisualizationSection({ currentMonthSummary, currentMonthChartData }) {
-  return (
-    <section className="mb-8 px-4 sm:px-6 md:px-8 lg:px-10">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <FundBreakdownChart budgetSummary={currentMonthSummary} />
-        <CustomBarChart chartData={currentMonthChartData || []} />
-      </div>
-    </section>
-  );
-}
-
-// --- Combined Category and Transaction Section ---
+// --- Combined Category and Transaction Section (Keep) ---
 function CategoryAndTransactionsSection({ categories, transactions }) {
-    return (
+    // ... (definition remains the same)
+     return (
         <section className="mb-8 px-4 sm:px-6 md:px-8 lg:px-10">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="lg:col-span-2">
@@ -47,9 +36,8 @@ function CategoryAndTransactionsSection({ categories, transactions }) {
     );
 }
 
+// --- Main HomePage Component ---
 const HomePage = () => {
-    // const dispatch = useDispatch(); // NO LONGER NEEDED
-
     const maxTransactionsToShow = 8;
     const maxCategoriesToShow = 8;
 
@@ -58,40 +46,29 @@ const HomePage = () => {
     const year = today.getFullYear();
     const currentMonthYearLabel = `${monthName} ${year} Summary`;
 
-    // Use selectors to get data from the Redux store
+    // --- Selectors ---
     const transactionsLoading = useSelector(state => state.transactions.loading);
     const categoriesLoading = useSelector(state => state.categories.loading);
     const incomeSourcesLoading = useSelector(state => state.incomeSources.loading);
     const transactionsError = useSelector(state => state.transactions.error);
     const categoriesError = useSelector(state => state.categories.error);
-    const incomeSourcesError = useSelector(state => state.incomeSources.error); // Corrected
+    const incomeSourcesError = useSelector(state => state.incomeSources.error);
 
     const currentMonthSummary = useSelector(selectCurrentMonthSummary);
-    const currentMonthChartData = useSelector(selectCurrentMonthChartData);
+    const currentMonthChartData = useSelector(selectCurrentMonthChartData); // <- Use the selector
     const currentMonthTransactions = useSelector(selectCurrentMonthTransactions).slice(0, maxTransactionsToShow);
     const categories = useSelector(selectAllCategories);
-    const [displayedCategories, setDisplayedCategories] = useState([]); // Keep this
-    const plaidInfo = useSelector(selectPlaidInfo); // Get Plaid info
+    const [displayedCategories, setDisplayedCategories] = useState([]);
+    // const plaidInfo = useSelector(selectPlaidInfo);
 
 
-    // useEffect(() => { // NO DATA FETCHING HERE
-    //     dispatch(fetchCategories());
-    //     dispatch(fetchIncomeSources());
-    //      dispatch(fetchPlaidInfo());
-    //     if (plaidInfo && plaidInfo.itemId) {
-    //       dispatch(fetchTransactions());
-    //     }
-    // }, [dispatch, plaidInfo]);
-
-
-    useEffect(() => { // Keep this for slicing categories
+    useEffect(() => {
         if (Array.isArray(categories)) {
             setDisplayedCategories(categories.slice(0, maxCategoriesToShow));
         }
     }, [categories]);
 
 
-    // Define links for the HomePage
     const homePageLinks = [
         { href: "/home/budget", text: "View Budget" },
         { href: "/home/transactions", text: "View Transactions" },
@@ -101,35 +78,38 @@ const HomePage = () => {
 
 
    if (transactionsLoading === 'pending' || categoriesLoading === 'pending' || incomeSourcesLoading === 'pending') {
-        return <div className="flex justify-center items-center h-screen">Loading financial data...</div>;
+        // ... loading state ...
+         return <div className="flex justify-center items-center h-screen">Loading financial data...</div>;
+   }
+    const combinedError = transactionsError || categoriesError || incomeSourcesError;
+    if (combinedError) {
+        // ... error state ...
+         return <div className="flex flex-col justify-center items-center h-screen text-danger-primary">
+                    <p>Error loading data:</p>
+                    <p>{combinedError}</p>
+                </div>;
     }
 
-    if (transactionsError) {
-        return <div className="flex justify-center items-center h-screen text-danger-primary">Error loading transactions: {transactionsError}</div>;
-    }
-    if (categoriesError) {
-        return <div className="flex justify-center items-center h-screen text-danger-primary">Error loading categories: {categoriesError}</div>;
-    }
-    if(incomeSourcesError) {
-      return  <div className="flex justify-center items-center h-screen text-danger-primary">Error loading income sources: {incomeSourcesError}</div>;
-    }
-
+    // --- Render function ---
     return (
         <>
             <PageHeader title="Home Dashboard" subtitle={currentMonthYearLabel} />
-            <VisualizationSection
-                currentMonthSummary={currentMonthSummary}
-                currentMonthChartData={currentMonthChartData}
-            />
 
-            <QuickStatsSection currentMonthSummary={currentMonthSummary} />
+            {/* Section for the Bar Chart */}
+            <section className="mb-8 px-4 sm:px-6 md:px-8 lg:px-10">
+                 <CustomBarChart chartData={currentMonthChartData || []} />
+            </section>
 
+            {/* Keep Quick Stats */}
+            <QuickStatsSection />
+
+            {/* Keep Categories & Transactions */}
             <CategoryAndTransactionsSection
                 categories={displayedCategories}
                 transactions={currentMonthTransactions}
             />
-            <NavigationLinks links={homePageLinks} />
 
+            <NavigationLinks links={homePageLinks} />
         </>
     );
 };

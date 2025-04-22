@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchCategories } from '../store/categoriesSlice';
 import { fetchIncomeSources } from '../store/incomeSourcesSlice';
 import { fetchPlaidInfo, fetchTransactions, syncTransactions, selectPlaidInfo } from '../store/transactionsSlice';
+import Layout from '../components/layout'; 
 
 export default function HomeLayout({ children }) {
     const dispatch = useDispatch();
@@ -28,8 +29,8 @@ export default function HomeLayout({ children }) {
     }, [dispatch, plaidInfo]);
 
     return (
-        <section className="bg-background-primary w-full">
-            {children}
-        </section>
+        <Layout> {/* Use the Layout component HERE */}
+            {children} {/* The actual page content */}
+        </Layout>
     );
 }

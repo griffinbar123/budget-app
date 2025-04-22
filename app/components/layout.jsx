@@ -1,6 +1,6 @@
 // components/Layout.jsx
 'use client';
-import Sidebar from "./siderbar";
+import Sidebar from "./sidebar";
 
 export default function Layout({ children }) {
   return (

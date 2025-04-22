@@ -1,43 +1,53 @@
+// /app/components/stat-card.jsx
 'use client'
-
 import React from 'react'
 
 function StatCard({ label, value, color, description, subtext, span, suffix }) {
 
   const getColorClass = (colorName) => {
     switch (colorName) {
-      case 'blue':   return 'text-blue-500'; // Or 'text-accent-primary' if you prefer
+      case 'blue':    return 'text-blue-500'; 
       case 'orange': return 'text-orange-500';
-      case 'green':  return 'text-success-primary';
-      case 'red':    return 'text-danger-primary';
-      case 'indigo': return 'text-indigo-500'; // Or a custom 'reserve' color
-      default:      return 'text-text-primary';
+      case 'green':   return 'text-success-primary';
+      case 'red':     return 'text-danger-primary';
+      case 'indigo': return 'text-indigo-500';
+      default:        return 'text-text-primary';
     }
   };
 
   const colorClass = getColorClass(color);
 
+  const formattedValue = typeof value === 'number' ? value.toLocaleString(undefined, {
+      minimumFractionDigits: (value % 1 === 0) ? 0 : 2,
+      maximumFractionDigits: 2
+  }) : '';
+
+  const showCurrencySymbol = typeof value === 'number';
 
   return (
-    <div className={`bg-background-primary p-4 rounded-lg ${span}`}>
-        <div className="flex flex-col gap-1">
+    <div className={`bg-background-primary p-4 rounded-lg shadow ${span || ''}`}> 
+      <div className="flex flex-col gap-1">
         <div className="flex items-center justify-between">
             <h3 className="text-sm font-medium text-text-primary">{label}</h3>
-            {/* Apply the dynamic color class here */}
-            <span className={`text-lg font-semibold ${colorClass}`}>
-              ${value?.toLocaleString()}{suffix && suffix}
+            <span
+                data-testid="stat-card-value" 
+                className={`text-lg font-semibold ${colorClass}`}
+            >
+                {showCurrencySymbol ? '$' : ''}{formattedValue}{suffix || ''}
             </span>
         </div>
         {subtext && (
             <p className="text-xs text-text-secondary/80">
-            {subtext}
+             {subtext}
             </p>
         )}
-        <p className="text-xs text-text-secondary leading-tight">
-            {description}
-        </p>
-        </div>
-  </div>
+        {description && (
+             <p className="text-xs text-text-secondary leading-tight">
+                 {description}
+             </p>
+        )}
+      </div>
+    </div>
   )
 }
 
