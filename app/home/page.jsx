@@ -3,9 +3,7 @@
 import { useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import {
-    selectCurrentMonthTransactions,
-    selectPlaidInfo
-} from '../store/transactionsSlice';
+    selectCurrentMonthTransactions,} from '../store/transactionsSlice';
 import {
   selectCurrentMonthSummary,
   selectCurrentMonthChartData, // <- Re-add selector import for the bar chart

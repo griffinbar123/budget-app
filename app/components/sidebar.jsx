@@ -17,7 +17,7 @@ import { FaPiggyBank } from "react-icons/fa"; //keep
 import { useState, useEffect } from "react";
 
 const routes = [
-  { name: "Dashboard", path: "/home", icon: FiHome },
+  { name: "Home", path: "/home", icon: FiHome },
   { name: "Budget", path: "/home/budget", icon: FiDollarSign },
   { name: "Transactions", path: "/home/transactions", icon: FiClock },
   // { name: "Savings", path: "/home/savings", icon: FaPiggyBank },
